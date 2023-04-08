@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.1)
 project(libnbt++
     VERSION 2.5)
 
@@ -6,6 +6,14 @@ project(libnbt++
 option(NBT_BUILD_SHARED "Build shared libraries" OFF)
 option(NBT_USE_ZLIB "Build additional zlib stream functionality" ON)
 option(NBT_BUILD_TESTS "Build the unit tests. Requires CxxTest." ON)
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND NOT DEFINED CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 11)
+endif()
+
+if(NOT DEFINED CMAKE_CXX_STANDARD_REQUIRED)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+endif()
 
 # hide this from includers.
 set(BUILD_SHARED_LIBS ${NBT_BUILD_SHARED})
@@ -44,7 +52,6 @@ if(NBT_USE_ZLIB)
     target_include_directories(nbt++ PUBLIC ${ZLIB_INCLUDE_DIRS})
     target_compile_definitions(nbt++ PUBLIC "-DNBT_HAVE_ZLIB")
 endif()
-target_compile_options(nbt++ PUBLIC -std=c++11)
 generate_export_header(nbt++ BASE_NAME nbt)
 
 if(${BUILD_SHARED_LIBS})
